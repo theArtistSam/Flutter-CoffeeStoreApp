@@ -63,7 +63,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/google_fonts
+    - assets/google_fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -78,10 +78,18 @@ flutter:
   # example:
   # fonts:
   #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/google_fonts/static/Sora-Regular.ttf
+        - asset: assets/google_fonts/static/Sora-Bold.ttf
+        - asset: assets/google_fonts/static/Sora-ExtraBold.ttf
+        - asset: assets/google_fonts/static/Sora-ExtraBold.ttf
+        - asset: assets/google_fonts/static/Sora-Light.ttf
+        - asset: assets/google_fonts/static/Sora-ExtraLight.ttf
+        - asset: assets/google_fonts/static/Sora-Medium.ttf
+        - asset: assets/google_fonts/static/Sora-Thin.ttf
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
