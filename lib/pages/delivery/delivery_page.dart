@@ -1,4 +1,3 @@
-import 'package:coffee_app/pages/order/order_page.dart';
 import 'package:coffee_app/utils/constants.dart';
 import 'package:coffee_app/utils/font.dart';
 import 'package:flutter/material.dart';
@@ -31,23 +30,28 @@ class DeliveryPage extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xffE4E4E4).withOpacity(0.25),
-                        spreadRadius: 0,
-                        blurRadius: 24,
-                        offset: const Offset(0, 4), // changes position of shadow
-                      ),                    
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(
-                      'assets/icons/back-arrow.svg',
+                GestureDetector(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xffE4E4E4).withOpacity(0.25),
+                          spreadRadius: 0,
+                          blurRadius: 24,
+                          offset: const Offset(0, 4), // changes position of shadow
+                        ),                    
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(
+                        'assets/icons/back-arrow.svg',
+                      ),
                     ),
                   ),
                 ),
@@ -196,10 +200,12 @@ class DeliveryPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12)
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(13),
                                 child: SvgPicture.asset(
-                                  'assets/icons/discount.svg',
-                                  color: primaryColor,
+                                  'assets/icons/bike.svg',
+                                    width: 30,
+                                    height: 30,
+                                    color: primaryColor,
                                 ),
                               ),
                             ),

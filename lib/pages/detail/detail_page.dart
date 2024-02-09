@@ -1,3 +1,5 @@
+import 'package:coffee_app/models/order_model.dart';
+import 'package:coffee_app/models/product_model.dart';
 import 'package:coffee_app/pages/detail/widgets/size_tile.dart';
 import 'package:coffee_app/pages/order/order_page.dart';
 import 'package:coffee_app/utils/constants.dart';
@@ -7,14 +9,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+// ignore: must_be_immutable
+class DetailPage extends StatefulWidget {
+  DetailPage({
+    super.key,
+    required this.product
+  });
+
+  ProductModel product;
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  
+  bool isReadMoreTapped = false;
+  String description = ''; // access prodcut description here
 
   @override
   Widget build(BuildContext context) {
     
+    bool isLargeDescription(){
+      if (widget.product.productDescription.length >= 150){
+        return true;
+      }
+      return false;
+    }
+    // isReadMoreTapped = _isLargeDescription() ? false : true;
+    String description = isReadMoreTapped ? widget.product.productDescription : isLargeDescription() ? '${widget.product.productDescription.substring(0, 147)}...' : widget.product.productDescription;
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,7 +55,7 @@ class DetailPage extends StatelessWidget {
             leading: IconButton(
               icon: SvgPicture.asset('assets/icons/back-arrow.svg'),
               onPressed: () {
-                // Add your onPressed logic here
+                Navigator.pop(context);
               },
             ),
             actions: [
@@ -63,7 +87,7 @@ class DetailPage extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.asset(
-                  'assets/images/coffee-1.png',
+                  'assets/images/${widget.product.productImage}',
                   width: screenWidth,
                   height: 225,
                   fit: BoxFit.cover,
@@ -71,12 +95,12 @@ class DetailPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Font(
-                text: "Cappucino",
+                text: widget.product.productName,
                 fontSize: 20,
               ),
               const SizedBox(height: 5),
               Font(
-                text: "with Chocolate",
+                text: widget.product.productTagLine,
                 fontSize: 12,
                 fontWeight: "Regular",
                 color: secondaryTextColor,
@@ -89,7 +113,7 @@ class DetailPage extends StatelessWidget {
                     height: 20,
                   ),
                   const SizedBox(width: 5),            
-                  Font(text: "4.8"),
+                  Font(text: '${widget.product.productRating}'),
                   const SizedBox(width: 5),            
                   Font(
                     text: "(230)",
@@ -104,11 +128,13 @@ class DetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),                    
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       child: SvgPicture.asset(
-                        'assets/icons/telephone.svg',
-                        color: primaryColor,
-                        // color: primaryColor,
+                        'assets/icons/bean.svg',
+                          width: 28,
+                          height: 28,
+                          color: primaryColor,
+
                       ),
                     ),
                   ),
@@ -121,9 +147,10 @@ class DetailPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: SvgPicture.asset(
-                        'assets/icons/telephone.svg', // icon not working
+                        'assets/icons/milk.svg', // icon not working
+                        width: 24,
+                        height: 24,
                         color: primaryColor,
-                        // color: primaryColor,
                       ),
                     ),
                   )
@@ -139,14 +166,14 @@ class DetailPage extends StatelessWidget {
                 TextSpan(
                   children: [                  
                     TextSpan(
-                      text: 'A cappuccino is an approximately 150 ml (5 oz) beverage, with 25 ml of espresso coffee and 85ml of fresh milk the fo.. ',
+                      text: description,
                       style: GoogleFonts.sora(
                         fontSize: 14,
                         color: secondaryTextColor,
                         fontWeight: FontWeight.w400
                       )
                     ),
-                    TextSpan(
+                    !isReadMoreTapped && isLargeDescription() ? TextSpan(
                       text: "Read More",
                       style: GoogleFonts.sora(
                         fontSize: 14,
@@ -155,9 +182,12 @@ class DetailPage extends StatelessWidget {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = (){
-                          // dont smth
+                          setState(() {
+                            print('yes');
+                            isReadMoreTapped = true;
+                          });
                         }
-                    ),
+                    ) : const TextSpan(),
                   ],
                 ),
               ),
@@ -213,7 +243,7 @@ class DetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Font(
-                    text: "\$4.53",
+                    text: "\$${widget.product.productPrice}",
                     color: primaryColor,
                     fontSize: 18,
                   ),
@@ -222,6 +252,11 @@ class DetailPage extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: (){
+                  bool isProductAlreadyInOrderList = orderList.any((order) => order.product == widget.product);
+                  // If the product is not already in the order list, add it
+                  if (!isProductAlreadyInOrderList) {
+                    orderList.add(OrderModel(product: widget.product, orderAmount: 1));
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const OrderPage()),
@@ -250,6 +285,4 @@ class DetailPage extends StatelessWidget {
       )
     );
   }
-
-
 }

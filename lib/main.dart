@@ -1,7 +1,3 @@
-import 'package:coffee_app/pages/dashboard/dashboard_page.dart';
-import 'package:coffee_app/pages/delivery/delivery_page.dart';
-import 'package:coffee_app/pages/detail/detail_page.dart';
-import 'package:coffee_app/pages/order/order_page.dart';
 import 'package:coffee_app/pages/start/start_page.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:flutter/material.dart';
@@ -41,7 +37,7 @@ class MyApp extends StatelessWidget {
             Theme.of(context).textTheme,
           ),
       ),
-      home: const DetailPage(),
+      home: const StartPage(),
     );
   }
 }

@@ -1,10 +1,7 @@
-// import 'dart:ui';
-
 import 'package:coffee_app/models/product_model.dart';
 import 'package:coffee_app/pages/dashboard/widgets/product_tile.dart';
 import 'package:coffee_app/pages/dashboard/widgets/scroll_tile.dart';
 import 'package:coffee_app/utils/constants.dart';
-import 'package:coffee_app/utils/custom_bottom_navbar.dart';
 import 'package:coffee_app/utils/font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -23,15 +20,30 @@ class _DashboardPageState extends State<DashboardPage> {
   final TextEditingController _textEditingController = TextEditingController();
 
   List<String> scrollTileItems = ["Cappuccino", "Machiato", "Latte", "Americano"];
-  
+  final ScrollController _outerController = ScrollController();  
+  final ScrollController _innerController = ScrollController();  
+
+  bool isSticky = false;
+
+  @override
+  void initState() {
+    super.initState();    
+  }
+
+  @override
+  void dispose() {
+    _outerController.dispose();
+    _innerController.dispose();    
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final statusBarHeight = MediaQuery.of(context).padding.top;
-
-    // Grid Count for note tiles
+    
+    // Grid view count for products
     int gridCount() {
       if (screenWidth > 160) {
         return (screenWidth ~/ 150).toInt();
@@ -50,11 +62,10 @@ class _DashboardPageState extends State<DashboardPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: statusBarHeight),
-                  
             // Personal Detials
             Row(
               children: [
-
+        
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       fontSize: 12,
                       color: secondaryTextColor,
                     ),
-
+        
                     // Dropdown menu
                     DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -107,77 +118,80 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xff313131),
-                borderRadius: BorderRadius.circular(16)
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: SvgPicture.asset(
-                        'assets/icons/search-unfilled.svg',
-                        color: backgroundColor,
-                      ),
-                    ),  
-                    Expanded(                      
-                      child: TextField(
-                      controller: _textEditingController,
-                        //autofocus: false,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search coffee",                                
-                          contentPadding: const EdgeInsets.all(15),                                
-                          hintStyle: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: secondaryTextColor,
-                          ),
-                        ),
-                        style: GoogleFonts.sora(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                        onChanged: (value) {
-                          // Handle text changes
-                        },
-                      ),
-                    ),
-                    Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: SvgPicture.asset(
-                          'assets/icons/customize.svg',
-                          color: primaryTextColorLight,
-                        )
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            
-            const SizedBox(height: 25),
-                        
-            SizedBox(
-              height: screenHeight - statusBarHeight - 400,
+            Expanded(
               child: ListView(
-                // key: UniqueKey(),
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(0),
                 children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xff313131),
+                      borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                        left: 5,
+                        right: 7,
+                        bottom: 5
+                      ),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: SvgPicture.asset(
+                              'assets/icons/search-unfilled.svg',
+                              color: backgroundColor,
+                            ),
+                          ),  
+                          Expanded(                      
+                            child: TextField(
+                            controller: _textEditingController,
+                              //autofocus: false,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Search coffee",                                
+                                contentPadding: const EdgeInsets.all(15),                                
+                                hintStyle: GoogleFonts.sora(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: secondaryTextColor,
+                                ),
+                              ),
+                              style: GoogleFonts.sora(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                              onChanged: (value) {
+                                // Handle text changes
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(12)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: SvgPicture.asset(
+                                'assets/icons/customize.svg',
+                                color: primaryTextColorLight,
+                              )
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  
                   Stack(
                     children: [
                       ClipRRect(
@@ -227,13 +241,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       )
                     ],
                   ),
-              
+                              
                   const SizedBox(height: 25),
-              
+                              
                   SizedBox(
                     height: 40,
                     child: ListView.separated(
-                      // key: UniqueKey(),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: scrollTileItems.length,
@@ -245,11 +258,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       },
                     ),
                   ),
-              
+                              
                   const SizedBox(height: 25),
-              
+                              
                   MasonryGridView.count(
-                    // key: UniqueKey(),                      
+                    // key: UniqueKey(),                                      
                     shrinkWrap: true,                                
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(0),
@@ -260,21 +273,73 @@ class _DashboardPageState extends State<DashboardPage> {
                     itemBuilder: (context, index) {
                       final product = allProducts[index];
                       return ProductTile(
-                        productImage: product.productImage,
-                        productName: product.productName,
-                        productDescription: product.productDescription,
-                        productPrice: product.productPrice,
-                        productRating: product.productRating,
+                        product: product
                       );
                     }
-                  )
+                  ),
+                
                 ],
               ),
             ),
+              
           ], 
         ),
       ),
-      // bottomNavigationBar: const CustomBottomNavBar(),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 25,
+              offset: const Offset(0, -10),
+              spreadRadius: 0,
+              color: const Color(0xffE4E4E4).withOpacity(.25),
+              
+            )
+          ]
+        ),
+        child: ClipRRect(
+          // borderRadius: BorderRadius.circular(25),
+          child: BottomNavigationBar(               
+            showSelectedLabels: false,
+            showUnselectedLabels: false,     
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            selectedItemColor: primaryColor,
+            onTap: (int index) {
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/home-filled.svg',
+                  color: primaryColor,
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/heart-unfilled.svg',
+                  color: secondaryTextColor,
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/bag-filled.svg',
+                  color: secondaryTextColor
+                ),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/icons/notification-filled.svg',
+                  color: secondaryTextColor
+                ),
+                label: '',
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,6 @@
+import 'package:coffee_app/models/order_model.dart';
 import 'package:coffee_app/pages/delivery/delivery_page.dart';
+import 'package:coffee_app/pages/order/widgets.dart/order_tile.dart';
 import 'package:coffee_app/utils/constants.dart';
 import 'package:coffee_app/utils/font.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,44 @@ class _OrderPageState extends State<OrderPage> {
   bool isPickedUp = false;
   int orderAmount = 1;
 
+  double getTotalOrderAmount() {    
+    double amount = 0;
+    for (var order in orderList) {
+      amount += order.product.productPrice * order.orderAmount;
+    }
+    return double.parse(amount.toStringAsFixed(2));
+  }
+
+
+  
+
+  void updateOrder(OrderModel updatedOrder) {
+    // Update the order in the list
+    setState(() {
+      orderList[orderList.indexOf(updatedOrder)] = updatedOrder;
+    });
+  }
+  void removeOrder(OrderModel removedOrder) {
+  // Remove the order from the list
+    setState(() {
+      orderList.remove(removedOrder);
+    });
+    
+    if (orderList.isEmpty){
+      setState(() {        
+        const snackBar = SnackBar(
+          content: Text('Order cart is empty'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Navigator.pop(context);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
-     double screenWidth = MediaQuery.of(context).size.width;
-   
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(        
@@ -34,7 +70,7 @@ class _OrderPageState extends State<OrderPage> {
             leading: IconButton(
               icon: SvgPicture.asset('assets/icons/back-arrow.svg'),
               onPressed: () {
-                // Add your onPressed logic here
+                Navigator.pop(context);
               },
             ),           
             title: Font(
@@ -135,143 +171,22 @@ class _OrderPageState extends State<OrderPage> {
                 fontWeight: "Regular",
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: borderColor
-                      ),
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/icons/edit.svg'),
-                          const SizedBox(width: 5),
-                          Font(
-                            text: "Edit Address",
-                            fontSize: 12,
-                            fontWeight: "Regular",
-                            color: primaryTextColorDark,                      
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10,),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: borderColor
-                      ),
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/note.svg',
-                          ),
-                          const SizedBox(width: 5),
-                          Font(
-                            text: "Add Note",
-                            fontSize: 12,
-                            fontWeight: "Regular",
-                            color: primaryTextColorDark,                      
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: orderList.length,
+                separatorBuilder: (BuildContext context, int index){
+                  return const SizedBox(height: 10);
+                } ,
+                itemBuilder: (BuildContext context, int index) {
+                  return OrderTile(
+                    order: orderList[index],
+                    onUpdateOrder: updateOrder,
+                    onRemoveOrder: removeOrder,
+                  );              
+                },
               ),
-              const Divider(
-                height: 40,
-                color: borderColor,              
-              ),
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/coffee-1.png',
-                      width: 55,
-                      height: 55,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Font(text: "Cappucino"),
-                      const SizedBox(height: 5),
-                      Font(
-                        text: "with Chocolate",
-                        fontSize: 12,
-                        fontWeight: "Regular",
-                        color: secondaryTextColor,
-                      )
-                    ],
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: (){
-                      setState(() {                      
-                        orderAmount > 1 ? orderAmount-- : null;
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: borderColor
-                        ),
-                        borderRadius: BorderRadius.circular(100)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset('assets/icons/minus.svg'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Font(
-                    text: '$orderAmount',
-                    fontSize: 14,
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        orderAmount++;
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: borderColor
-                        ),
-                        borderRadius: BorderRadius.circular(100)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset('assets/icons/plus.svg'),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+            
               const Divider(
                 height: 40,
                 color: borderColor,
@@ -298,7 +213,7 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                       const Spacer(),
                       SvgPicture.asset(
-                        'assets/icons/back-arrow.svg',                    
+                        'assets/icons/arrow-right.svg',                    
                         color: primaryColor,
                       ),
                     ],
@@ -319,7 +234,7 @@ class _OrderPageState extends State<OrderPage> {
                   ),
                   const Spacer(),
                   Font(
-                    text: "\$4.53",
+                    text: "\$${getTotalOrderAmount()}",
                     fontSize: 14,
                   ),
                 ],
@@ -359,7 +274,7 @@ class _OrderPageState extends State<OrderPage> {
                   ),
                   const Spacer(),                
                   Font(
-                    text: "\$5.53",
+                    text: "\$${getTotalOrderAmount() + 1}",
                     fontSize: 14,                  
                   ),
                 ],
@@ -430,7 +345,7 @@ class _OrderPageState extends State<OrderPage> {
                                 vertical: 5
                               ),
                               child: Font(
-                                text: "\$5.53",
+                                text: "\$${getTotalOrderAmount() + 1}",
                                 fontSize: 12,
                                 fontWeight: "Regular",
                               ),
@@ -448,10 +363,16 @@ class _OrderPageState extends State<OrderPage> {
                   const SizedBox(height: 20),
                   GestureDetector(
                     onTap: (){
+                      orderList.clear();
+                      const snackBar = SnackBar(
+                          content: Text('Order completed!'),
+                        );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const DeliveryPage(),
-                      ));
+                      ));                      
                     },
                     child: Container(
                       width: screenWidth,
