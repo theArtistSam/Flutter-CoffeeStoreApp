@@ -26,6 +26,7 @@ class DetailPage extends StatelessWidget {
             horizontal: 16,
           ),
           child: AppBar(
+            surfaceTintColor: Colors.transparent,            
             backgroundColor: Colors.white,
             leading: IconButton(
               icon: SvgPicture.asset('assets/icons/back-arrow.svg'),
