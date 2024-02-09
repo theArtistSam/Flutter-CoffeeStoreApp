@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
             Theme.of(context).textTheme,
           ),
       ),
-      home: OrderPage(),
+      home: const DetailPage(),
     );
   }
 }

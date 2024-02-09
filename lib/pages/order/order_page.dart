@@ -13,10 +13,14 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   bool isDelivered = true;
   bool isPickedUp = false;
+  int orderAmount = 1;
 
   @override
   Widget build(BuildContext context) {
+     double screenWidth = MediaQuery.of(context).size.width;
+   
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Padding(
@@ -218,40 +222,243 @@ class _OrderPageState extends State<OrderPage> {
                   ],
                 ),
                 const Spacer(),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: borderColor
+                GestureDetector(
+                  onTap: (){
+                    setState(() {                      
+                      orderAmount > 1 ? orderAmount-- : null;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: borderColor
+                      ),
+                      borderRadius: BorderRadius.circular(100)
                     ),
-                    borderRadius: BorderRadius.circular(100)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: SvgPicture.asset('assets/icons/minus.svg'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: SvgPicture.asset('assets/icons/minus.svg'),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 20),
                 Font(
-                  text: '1',
+                  text: '$orderAmount',
                   fontSize: 14,
                 ),
                 const SizedBox(width: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: borderColor
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      orderAmount++;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: borderColor
+                      ),
+                      borderRadius: BorderRadius.circular(100)
                     ),
-                    borderRadius: BorderRadius.circular(100)
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: SvgPicture.asset('assets/icons/plus.svg'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: SvgPicture.asset('assets/icons/plus.svg'),
+                    ),
                   ),
                 )
               ],
-            )
-            
+            ),
+            const Divider(
+              height: 40,
+              color: borderColor,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: borderColor
+                ),
+                borderRadius: BorderRadius.circular(14)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/discount.svg',
+                      color: primaryColor,
+                    ),
+                    const SizedBox(width: 10,),
+                    Font(
+                      text: "1 Discount is applied",
+                      fontSize: 14,
+                    ),
+                    const Spacer(),
+                    SvgPicture.asset(
+                      'assets/icons/back-arrow.svg',                    
+                      color: primaryColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Font(
+              text: "Payment Summary"
+            ),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Font(
+                  text: "Price",
+                  fontSize: 14,
+                  fontWeight: "Regular",
+                ),
+                const Spacer(),
+                Font(
+                  text: "\$4.53",
+                  fontSize: 14,
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Font(
+                  text: "Delivery Fee",
+                  fontSize: 14,
+                  fontWeight: "Regular",
+                ),
+                const Spacer(),
+                Font(
+                  text: "\$2.0",
+                  fontSize: 14,
+                  lineThrough: "Line-through",
+                  fontWeight: "Regular",
+                ),
+                const SizedBox(width: 10),
+                Font(
+                  text: "\$1.0",
+                  fontSize: 14,                  
+                ),
+              ],
+            ),
+            const Divider(
+              height: 40,
+              color: borderColor,
+            ),
+            Row(
+              children: [
+                Font(
+                  text: "Total Payment",
+                  fontSize: 14,
+                  fontWeight: "Regular",
+                ),
+                const Spacer(),                
+                Font(
+                  text: "\$5.53",
+                  fontSize: 14,                  
+                ),
+              ],
+            ),            
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25)
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xffE4E4E4).withOpacity(0.25),
+              spreadRadius: 5,
+              blurRadius: 24,
+              offset: const Offset(0, -10), // changes position of shadow
+            ),
+          ],
+        ),
+        child: BottomAppBar(
+          elevation: 0,        
+          height: 140,
+          color: Colors.transparent,        
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                      SvgPicture.asset(
+                        'assets/icons/discount.svg',
+                        color: primaryColor,
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xffF6F6F6),
+                          borderRadius: BorderRadius.circular(50)
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                borderRadius: BorderRadius.circular(50)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 5
+                                ),
+                                child: Font(
+                                  text: "Cash",
+                                  fontSize: 12,
+                                  fontWeight: "Regular",
+                                  color: primaryTextColorLight,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5
+                              ),
+                              child: Font(
+                                text: "\$5.53",
+                                fontSize: 12,
+                                fontWeight: "Regular",
+                              ),
+                            ),
+                          ],
+                        ),                        
+                      ),
+                      const Spacer(),
+                      SvgPicture.asset(
+                        'assets/icons/dots-filled.svg',
+                        color: const Color(0xff808080),
+                      )
+                    ]
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                      color: primaryColor,
+                      borderRadius: BorderRadius.circular(15) 
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Font(
+                        text: "Order",
+                        color: primaryTextColorLight,
+                        textAlign: "Center",
+                      ),
+                    ),
+                  )
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -12,6 +12,7 @@ class Font extends StatelessWidget {
     this.fontWeight,
     this.textAlign,
     this.backgroundColor,
+    this.lineThrough
   });
 
   String text;
@@ -20,6 +21,7 @@ class Font extends StatelessWidget {
   String? fontWeight;
   String? textAlign;
   Color? backgroundColor;
+  String? lineThrough;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +32,10 @@ class Font extends StatelessWidget {
         fontSize: fontSize,
         fontWeight: fontWeight == "Regular" ? FontWeight.w400 : FontWeight.w600        ,
         background: backgroundColor != null ? (Paint()..color = backgroundColor!) : null,
+        decoration: lineThrough == "Line-through" ? TextDecoration.lineThrough : null
       ),
       textAlign: textAlign == "Center" ? TextAlign.center : TextAlign.left,
+      
     );
   }
 }

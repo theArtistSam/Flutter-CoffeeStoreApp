@@ -1,4 +1,5 @@
 import 'package:coffee_app/pages/detail/widgets/size_tile.dart';
+import 'package:coffee_app/pages/order/order_page.dart';
 import 'package:coffee_app/utils/constants.dart';
 import 'package:coffee_app/utils/font.dart';
 import 'package:flutter/gestures.dart';
@@ -127,9 +128,10 @@ class DetailPage extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 20), 
-              const Divider(height: 0),
-              const SizedBox(height: 20), 
+              const Divider(
+                height: 40,
+                color: borderColor,
+              ),
               Font(text: "Description"),
               const SizedBox(height: 10),            
               Text.rich(
@@ -192,7 +194,7 @@ class DetailPage extends StatelessWidget {
         ),
         child: BottomAppBar(
           elevation: 0,        
-          height: 120,
+          height: 100,
           color: Colors.transparent,        
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -217,19 +219,27 @@ class DetailPage extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 70,
-                    vertical: 19
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OrderPage()),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(16)
                   ),
-                  child: Font(
-                    text: "Buy Now",
-                    color: primaryTextColorLight,                
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 70,
+                      vertical: 19
+                    ),
+                    child: Font(
+                      text: "Buy Now",
+                      color: primaryTextColorLight,                
+                    ),
                   ),
                 ),
               )
