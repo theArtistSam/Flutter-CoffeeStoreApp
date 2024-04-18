@@ -361,7 +361,9 @@ class _OrderPageState extends State<OrderPage> {
                     ]
                   ),
                   const SizedBox(height: 20),
-                  GestureDetector(
+                  InkWell(
+                    highlightColor: primaryTapColor,
+                    borderRadius: BorderRadius.circular(15),
                     onTap: (){
                       orderList.clear();
                       const snackBar = SnackBar(
@@ -374,7 +376,7 @@ class _OrderPageState extends State<OrderPage> {
                         MaterialPageRoute(builder: (context) => const DeliveryPage(),
                       ));                      
                     },
-                    child: Container(
+                    child: Ink(
                       width: screenWidth,
                       decoration: BoxDecoration(
                         color: primaryColor,

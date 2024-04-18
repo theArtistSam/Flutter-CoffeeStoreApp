@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 const primaryColor = Color(0xffC67C4E);
+const primaryTapColor = Color(0xffAE5F2E);
 const primaryColorLight = Color(0xffFFF5EE);
 const backgroundColor = Color(0xffF9F9F9);
 const borderColor = Color(0xffEAEAEA);
