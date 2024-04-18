@@ -28,15 +28,15 @@ class _OrderPageState extends State<OrderPage> {
 
 
   
-
   void updateOrder(OrderModel updatedOrder) {
     // Update the order in the list
     setState(() {
       orderList[orderList.indexOf(updatedOrder)] = updatedOrder;
     });
   }
+ 
   void removeOrder(OrderModel removedOrder) {
-  // Remove the order from the list
+    // Remove the order from the list
     setState(() {
       orderList.remove(removedOrder);
     });
