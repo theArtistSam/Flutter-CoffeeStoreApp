@@ -29,6 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _innerController = ScrollController();
 
   bool isSticky = false;
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -250,7 +251,15 @@ class _DashboardPageState extends State<DashboardPage> {
                       return const SizedBox(width: 10);
                     },
                     itemBuilder: (BuildContext context, int index) {
-                      return ScrollTile(tileText: scrollTileItems[index]);
+                      return ScrollTile(
+                        onTap: () {
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                        },
+                        isSelected: selectedIndex == index,
+                        title: scrollTileItems[index],
+                      );
                     },
                   ),
                 ),

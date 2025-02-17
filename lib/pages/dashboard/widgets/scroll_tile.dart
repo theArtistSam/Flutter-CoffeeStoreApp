@@ -3,42 +3,36 @@ import 'package:coffee_app/utils/font.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class ScrollTile extends StatefulWidget {
-  ScrollTile({
+class ScrollTile extends StatelessWidget {
+  const ScrollTile({
     super.key,
-    required this.tileText
+    required this.title,
+    required this.onTap,
+    this.isSelected = false,
   });
 
-  String tileText;
+  final String title;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  @override
-  State<ScrollTile> createState() => _ScrollTileState();
-}
-
-class _ScrollTileState extends State<ScrollTile> {
-  bool isTapped = false;  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        setState(() {
-          isTapped = !isTapped;
-        });
-      },
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: isTapped ? primaryColor : Colors.white,
-          borderRadius: BorderRadius.circular(12)
+          color: isSelected ? primaryColor : Colors.white,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Font(
-            text: widget.tileText,
+            text: title,
             fontSize: 14,
-            fontWeight: isTapped ? "Semi-Bold" : "Regular",
-            color: isTapped ? primaryTextColorLight : primaryTextColorDark,
+            fontWeight: isSelected ? "Semi-Bold" : "Regular",
+            color: isSelected ? primaryTextColorLight : primaryTextColorDark,
           ),
-        )
+        ),
       ),
     );
   }

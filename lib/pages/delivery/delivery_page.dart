@@ -21,10 +21,11 @@ class DeliveryPage extends StatelessWidget {
             height: double.infinity,
           ),
           DraggableScrollableSheet(
-              initialChildSize: 0.45,
-              minChildSize: 0.37,
-              maxChildSize: .5,                            
-              builder: (context, controller) => _showBottomSheet(controller)),
+            initialChildSize: 0.45,
+            minChildSize: 0.37,
+            maxChildSize: .5,
+            builder: (context, controller) => _showBottomSheet(controller),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: 30, vertical: 30 + statusBarHeight),
@@ -86,13 +87,13 @@ class DeliveryPage extends StatelessWidget {
     );
   }
 
-  Widget _showBottomSheet(controller) => Container(        
+  Widget _showBottomSheet(controller) => Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(25),          
+          borderRadius: BorderRadius.circular(25),
         ),
         child: ListView(
-          // physics: const BouncingScrollPhysics(),
+          // physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(0),
           controller: controller,
           children: [
@@ -135,9 +136,13 @@ class DeliveryPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    children: [
-                      Expanded(
+                    children: List.generate(
+                      4, // Number of progress bars
+                      (index) => Expanded(
                         child: Container(
+                          margin: EdgeInsets.only(
+                            right: index < 3 ? 10 : 0,
+                          ), // Add space except for the last item
                           height: 5,
                           decoration: BoxDecoration(
                             color: confirmColor,
@@ -145,37 +150,7 @@ class DeliveryPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Container(
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: confirmColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Container(
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: confirmColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Container(
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: confirmColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 15),
                   Container(
@@ -262,23 +237,21 @@ class DeliveryPage extends StatelessWidget {
                       ),
                       const Spacer(),
                       InkWell(
-                        child: GestureDetector(
-                          onTap: () {
-                            // Your onTap functionality here
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: borderColor,
-                              ),
-                              borderRadius: BorderRadius.circular(15),
+                        onTap: () {
+                          // Your onTap functionality here
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: borderColor,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: SvgPicture.asset(
-                                'assets/icons/telephone.svg',
-                                color: const Color(0xff808080),
-                              ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: SvgPicture.asset(
+                              'assets/icons/telephone.svg',
+                              color: const Color(0xff808080),
                             ),
                           ),
                         ),
